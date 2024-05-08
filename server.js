@@ -101,7 +101,6 @@ app.post("/customers", (req, res) => {
   const city = req.body.city;
   const postCode = req.body.postcode;
   const country = req.body.country;
-
   const query = `INSERT INTO customers(name, email, phone, address, city, postcode,country)VALUES($1,$2,$3,$4,$5,$6,$7)`;
   db.query(query, [name, email, phone, address, city, postCode, country])
     .then(() => {
@@ -112,6 +111,15 @@ app.post("/customers", (req, res) => {
         error: error,
       })
     );
+});
+
+//Delete endpoint
+app.delete("/customers/:id", function (req, res) {
+  const custId = req.params.id;
+
+  db.query("DELETE FROM customers WHERE id=$1", [custId])
+    .then(() => res.send(`Customer ${custId} deleted!`))
+    .catch((err) => console.error(err));
 });
 
 app.listen(port, () => {
